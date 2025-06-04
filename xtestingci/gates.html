@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="cedric.ollivier@orange.com">
+  <title>XtestingCI Gate</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@5.2.0/dist/reset.css">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@5.2.0/dist/reveal.css">
+  <style>
+    .reveal .sourceCode {  /* see #7635 */
+      overflow: visible;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@5.2.0/dist/theme/sky.css" id="theme">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">XtestingCI Gate</h1>
+  <p class="author"><a href="mailto:cedric.ollivier@orange.com"
+class="email">cedric.ollivier@orange.com</a></p>
+  <p class="date">2025/06/05</p>
+</section>
+
+<section>
+<section id="xtestingci" class="title-slide slide level1">
+<h1>XtestingCI</h1>
+
+</section>
+<section id="an-ansible-role" class="slide level3">
+<h3>An ansible role</h3>
+<ul>
+<li>eases deploying anywhere plug-and-play CI/CD toolchains in a few
+commands</li>
+<li>leverages on the common test case execution proposed by Xtesting,
+the test integration framework</li>
+<li>supports multiple components such as Jenkins and GitLab CI/CD (test
+schedulers) and multiple deployment models such as all-in-one or
+distributed services</li>
+</ul>
+<p><strong>A key help for our automation journey!</strong></p>
+</section>
+<section id="xtesting-cicd-toolchain" class="slide level3">
+<h3>Xtesting CI/CD toolchain</h3>
+<p><img data-src="ftth.png" /></p>
+</section>
+<section id="well-reused" class="slide level3">
+<h3>Well reused</h3>
+<ul>
+<li><a
+href="https://www.gsma.com/newsroom/wp-content/uploads/NG.133-v2.0-11.pdf">GSMA
+NG.133</a> and <a
+href="https://docs.anuket.io/projects/RA2/en/stable-quinnipiac/chapters/chapter06.html">NG.139</a></li>
+<li><a href="https://www.youtube.com/watch?v=YheJ51kbcU8">Orange
+RFP</a></li>
+<li><a href="https://www.youtube.com/watch?v=YheJ51kbcU8">Orange product
+and deployment verification</a></li>
+<li>Orange Network Integration Factory</li>
+<li><a
+href="https://www.linkedin.com/pulse/learn-xtesting-using-interactive-browser-based-labs-c%C3%A9dric-ollivier">Xtesting
+Training courses</a></li>
+</ul>
+<p><strong>Try it, and you will love it!</strong></p>
+</section>
+<section id="main-objectives" class="slide level3">
+<h3>Main objectives</h3>
+<ul>
+<li>install and configure all CI services from scratch</li>
+<li>support RHEL, Ubuntu, Debian and Alpine (16 active releases in
+total)</li>
+<li>support multiple containerization technologies (Docker, Podman,
+Kubernetes)</li>
+<li>offer 20+ deployment scenarios from all-in-one in your server to
+full distributed corporate services</li>
+<li>enable local or remote deployment, with proxies or without
+proxies</li>
+</ul>
+<p><strong>Huge verification matrix!</strong></p>
+</section>
+<section id="a-few-technical-details" class="slide level3">
+<h3>A few technical details</h3>
+<ul>
+<li>all services run in containers (i.e. Docker, Podman, Kubernetes) and
+are accessible via IP addresses</li>
+<li>all installation and configuration steps are decoupled to support
+the various deployment models</li>
+<li>data persistence is maintained by mounting volumes</li>
+<li>XtestingCI installs only the dependencies required for each
+service</li>
+</ul>
+</section>
+<section id="technical-challenges" class="slide level3">
+<h3>Technical challenges</h3>
+<ul>
+<li>Ansible requires many Python libraries which must be managed and
+controlled</li>
+<li>Ansible depends on low-level commands which may be missing
+(e.g. iproute, lsb_release, …)</li>
+<li>they are a few bugs in the GNU/Linux distribution packages (see <a
+href="https://gitlab.alpinelinux.org/alpine/aports/-/issues/16984">Incompatibility
+between py3-requests and ansible in Alpine</a>)</li>
+<li>the distributions don’t offer the same Python packages, which
+requires many Ansible conditions</li>
+</ul>
+<p><strong>Impossible to verify by hand!</strong></p>
+</section>
+<section id="maintenance-challenges" class="slide level3">
+<h3>Maintenance challenges</h3>
+<ul>
+<li>a new release is frequently out (i.e. Alpine releases every 6
+months)</li>
+<li>RHEL updates Ansible and then its needed Python version</li>
+<li>CentOS is no longer a downstream project which required to switch to
+RockyLinux</li>
+<li>the stable Ansible collections require the latest python
+versions</li>
+<li>even pip and setuptools may destroy a frozen release</li>
+</ul>
+<p><strong>XtestingCI must be continuously verified!</strong></p>
+</section></section>
+<section>
+<section id="xtestingci-gate" class="title-slide slide level1">
+<h1>XtestingCI Gate</h1>
+
+</section>
+<section id="setup" class="slide level3">
+<h3>Setup</h3>
+<ul>
+<li>Anuket CI/CD toolchain (Gerrit + Jenkins)</li>
+<li>1 server used in the Anuket data center</li>
+<li>Jenkins-job-builder which takes simple descriptions of Jenkins jobs
+in YAML which allows leveraging
+<ul>
+<li>YAML anchors</li>
+<li>Job Templates</li>
+</ul></li>
+</ul>
+<p><strong>~500 lines to generate 1132 jobs</strong></p>
+</section>
+<section id="a-verification-job" class="slide level3">
+<h3>A verification job</h3>
+<ul>
+<li>clean all the resources created by the previous job</li>
+<li>run the right container as privileged, using the host’s network
+stack and binding:
+<ul>
+<li>/run to access both Podman and Docker sockets</li>
+<li>/data to access the configuration files</li>
+<li>helm and docker configuration files to avoid Docker Hub pull rate
+limits</li>
+</ul></li>
+<li>install Ansible, clone XtestingCI and execute the test playbook in
+the container</li>
+</ul>
+</section>
+<section id="gating-metrics-and-results" class="slide level3">
+<h3>Gating metrics and results</h3>
+<ul>
+<li>30+ changes published to implement the new Gates</li>
+<li>many bugs detected such as:
+<ul>
+<li><a
+href="https://github.com/collivier/ansible-role-xtesting/commit/934ecc2d0f7ce1c53fb863246f01c9a0dd53e803">Six
+must be installed in rhel 8 when kubernetes too</a></li>
+<li><a
+href="https://github.com/collivier/ansible-role-xtesting/commit/40b5b0b17bc23dc897fbf50e221fe9f6acd73506">Install
+py3-requests in any case</a></li>
+<li><a
+href="https://github.com/collivier/ansible-role-xtesting/commit/157134bbed7c32e15b96a3d3ba359adde97e3089">community.docker
+must be updated if Focal</a></li>
+<li><a
+href="https://github.com/collivier/ansible-role-xtesting/commit/ff9fb53d5df862aa22fa9235e9ba24a040be07fa">tag
++ digest requires podman &gt;= 3.3</a></li>
+<li><a
+href="https://github.com/collivier/ansible-role-xtesting/commit/44844e64080a11f3d057f459a89e54a52c8b3280">Improve
+podman logics</a></li>
+</ul></li>
+</ul>
+<p><strong>And updating XtestingCI is so much easier</strong></p>
+</section>
+<section id="current-limits" class="slide level3">
+<h3>current limits</h3>
+<ul>
+<li>Podman client and server versions must be compatible</li>
+<li>running all the verification jobs ends after weeks and additional
+servers should be added</li>
+<li>a few jobs must be also executed before merge to detect maximum of
+bugs as early as possible</li>
+</ul>
+<p><strong>The gate must be always improved</strong></p>
+</section></section>
+<section>
+<section id="conclusion" class="title-slide slide level1">
+<h1>Conclusion</h1>
+
+</section>
+<section id="takeaways" class="slide level3">
+<h3>Takeaways</h3>
+<ul>
+<li>strong automated code verification speeds up the development and
+dramatically reduces the number of bugs</li>
+<li>a significant effort was made during the development cycle of
+XtestingCI 5.0 and it was worth it</li>
+<li>the gates must be continuously improved and its development never
+ends</li>
+</ul>
+</section></section>
+<section id="thank-you" class="title-slide slide level1">
+<h1>Thank You!</h1>
+
+</section>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/reveal.js@5.2.0/dist/reveal.js"></script>
+
+  <!-- reveal.js plugins -->
+  <script src="https://unpkg.com/reveal.js@5.2.0/plugin/notes/notes.js"></script>
+  <script src="https://unpkg.com/reveal.js@5.2.0/plugin/search/search.js"></script>
+  <script src="https://unpkg.com/reveal.js@5.2.0/plugin/zoom/zoom.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+        // Display controls in the bottom right corner
+        controls: true,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: false,
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: false,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: true,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'slide',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'fade',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // reveal.js plugins
+        plugins: [
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    </body>
+</html>
